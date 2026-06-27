@@ -15,7 +15,7 @@ app.use(express.static('public'));
 // Data storage
 const DATA_FILE = path.join(__dirname, 'data.json');
 
-// Pre-defined keys
+// Pre-defined keys with your specific requirements
 const PREMIUM_KEYS = [];
 for (let i = 1; i <= 20; i++) {
     const num = String(i).padStart(2, '0');
@@ -28,29 +28,33 @@ for (let i = 1; i <= 20; i++) {
     });
 }
 
-const PAID_KEYS = [];
-for (let i = 1; i <= 20; i++) {
-    const num = String(i).padStart(2, '0');
-    PAID_KEYS.push({
-        key: `TNEHPAID${num}`,
-        credit: 500,
-        type: 'paid',
-        used: false,
-        created: new Date().toISOString()
-    });
-}
+// PAID KEYS - 500 credit
+const PAID_KEYS_500 = [
+    { key: 'TNEHPAID1', credit: 500, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID2', credit: 500, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID3', credit: 500, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID4', credit: 500, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID5', credit: 500, type: 'paid', used: false, created: new Date().toISOString() }
+];
 
-const FREE_KEYS = [];
-for (let i = 1; i <= 2; i++) {
-    const num = String(i).padStart(2, '0');
-    FREE_KEYS.push({
-        key: `TNEHFREE${num}`,
-        credit: 1000,
-        type: 'free',
-        used: false,
-        created: new Date().toISOString()
-    });
-}
+// PAID KEYS - 1000 credit
+const PAID_KEYS_1000 = [
+    { key: 'TNEHPAID10', credit: 1000, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID11', credit: 1000, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID12', credit: 1000, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID13', credit: 1000, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID14', credit: 1000, type: 'paid', used: false, created: new Date().toISOString() },
+    { key: 'TNEHPAID15', credit: 1000, type: 'paid', used: false, created: new Date().toISOString() }
+];
+
+// FREE KEYS
+const FREE_KEYS = [
+    { key: 'TNEHFREE1', credit: 1000, type: 'free', used: false, created: new Date().toISOString() },
+    { key: 'TNEHFREE2', credit: 1000, type: 'free', used: false, created: new Date().toISOString() }
+];
+
+// Combine all paid keys
+const PAID_KEYS = [...PAID_KEYS_500, ...PAID_KEYS_1000];
 
 // Initialize data file with pre-defined keys if not exists
 if (!fs.existsSync(DATA_FILE)) {
@@ -59,6 +63,7 @@ if (!fs.existsSync(DATA_FILE)) {
         usage: []
     };
     fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
+    console.log('✅ Data file created with all keys');
 } else {
     // Check if keys exist, if not add them
     const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -73,8 +78,16 @@ if (!fs.existsSync(DATA_FILE)) {
         }
     });
     
-    // Add paid keys if not exist
-    PAID_KEYS.forEach(key => {
+    // Add paid keys (500 credit) if not exist
+    PAID_KEYS_500.forEach(key => {
+        if (!existingKeys.includes(key.key)) {
+            data.keys.push(key);
+            added++;
+        }
+    });
+    
+    // Add paid keys (1000 credit) if not exist
+    PAID_KEYS_1000.forEach(key => {
         if (!existingKeys.includes(key.key)) {
             data.keys.push(key);
             added++;
@@ -135,14 +148,30 @@ function generatePremiumKeys(count = 20) {
     return keys;
 }
 
-// Generate TNEHPAID keys (20 keys for 500 credits)
-function generatePaidKeys(count = 20) {
+// Generate TNEHPAID keys (500 credit)
+function generatePaidKeys500(count = 5) {
     const keys = [];
+    const existingPaidKeys = ['TNEHPAID1', 'TNEHPAID2', 'TNEHPAID3', 'TNEHPAID4', 'TNEHPAID5'];
     for (let i = 0; i < count; i++) {
-        const num = String(i + 1).padStart(2, '0');
         keys.push({
-            key: `TNEHPAID${num}`,
+            key: existingPaidKeys[i] || `TNEHPAID${i+1}`,
             credit: 500,
+            type: 'paid',
+            used: false,
+            created: new Date().toISOString()
+        });
+    }
+    return keys;
+}
+
+// Generate TNEHPAID keys (1000 credit)
+function generatePaidKeys1000(count = 6) {
+    const keys = [];
+    const existingPaidKeys = ['TNEHPAID10', 'TNEHPAID11', 'TNEHPAID12', 'TNEHPAID13', 'TNEHPAID14', 'TNEHPAID15'];
+    for (let i = 0; i < count; i++) {
+        keys.push({
+            key: existingPaidKeys[i] || `TNEHPAID${i+10}`,
+            credit: 1000,
             type: 'paid',
             used: false,
             created: new Date().toISOString()
@@ -154,10 +183,10 @@ function generatePaidKeys(count = 20) {
 // Generate TNEHFREE keys (2 keys for 1000 credits)
 function generateFreeKeys(count = 2) {
     const keys = [];
+    const existingFreeKeys = ['TNEHFREE1', 'TNEHFREE2'];
     for (let i = 0; i < count; i++) {
-        const num = String(i + 1).padStart(2, '0');
         keys.push({
-            key: `TNEHFREE${num}`,
+            key: existingFreeKeys[i] || `TNEHFREE${i+1}`,
             credit: 1000,
             type: 'free',
             used: false,
@@ -194,7 +223,7 @@ app.get('/api/credit=1000&createkey', (req, res) => {
 // 2. Generate 500 credit paid keys
 app.get('/api/credit=500&createkey', (req, res) => {
     const data = readData();
-    const newKeys = generatePaidKeys(20);
+    const newKeys = generatePaidKeys500(5);
     
     const existingKeys = data.keys.map(k => k.key);
     const filteredNewKeys = newKeys.filter(k => !existingKeys.includes(k.key));
@@ -212,7 +241,28 @@ app.get('/api/credit=500&createkey', (req, res) => {
     });
 });
 
-// 3. Generate 1000 credit free keys (2 keys)
+// 3. Generate 1000 credit paid keys
+app.get('/api/credit=1000&createkey&type=paid', (req, res) => {
+    const data = readData();
+    const newKeys = generatePaidKeys1000(6);
+    
+    const existingKeys = data.keys.map(k => k.key);
+    const filteredNewKeys = newKeys.filter(k => !existingKeys.includes(k.key));
+    
+    data.keys.push(...filteredNewKeys);
+    writeData(data);
+    
+    res.json({
+        success: true,
+        message: `${filteredNewKeys.length} paid keys (1000 credit) generated successfully`,
+        keys: filteredNewKeys.map(k => k.key),
+        total: data.keys.length,
+        developer: "TNEH GROUP",
+        telegram: "@tneh_owner"
+    });
+});
+
+// 4. Generate 1000 credit free keys (2 keys)
 app.get('/api/credit=1000&createkey&type=free', (req, res) => {
     const data = readData();
     const newKeys = generateFreeKeys(2);
@@ -233,7 +283,7 @@ app.get('/api/credit=1000&createkey&type=free', (req, res) => {
     });
 });
 
-// 4. Check credit by key
+// 5. Check credit by key
 app.get('/api/check/credit', (req, res) => {
     const { key } = req.query;
     
@@ -282,7 +332,7 @@ app.get('/api/check/credit', (req, res) => {
     });
 });
 
-// 5. FF Like API (Main endpoint)
+// 6. FF Like API (Main endpoint)
 app.get('/api/fflike', async (req, res) => {
     const { key, region, uid } = req.query;
     const startTime = Date.now();
@@ -380,7 +430,7 @@ app.get('/api/fflike', async (req, res) => {
     }
 });
 
-// 6. Get all keys (admin)
+// 7. Get all keys (admin)
 app.get('/api/keys', (req, res) => {
     const data = readData();
     const keysWithStatus = data.keys.map(k => ({
@@ -404,7 +454,7 @@ app.get('/api/keys', (req, res) => {
     });
 });
 
-// 7. Get usage logs (admin)
+// 8. Get usage logs (admin)
 app.get('/api/logs', (req, res) => {
     const data = readData();
     res.json({
@@ -416,7 +466,7 @@ app.get('/api/logs', (req, res) => {
     });
 });
 
-// 8. Reset all keys (admin)
+// 9. Reset all keys (admin)
 app.get('/api/reset', (req, res) => {
     const data = readData();
     data.keys.forEach(k => {
@@ -435,7 +485,7 @@ app.get('/api/reset', (req, res) => {
     });
 });
 
-// 9. Get available keys count
+// 10. Get available keys count
 app.get('/api/available', (req, res) => {
     const data = readData();
     const available = data.keys.filter(k => !k.used);
@@ -448,7 +498,8 @@ app.get('/api/available', (req, res) => {
         used_keys: total - available.length,
         keys_by_type: {
             premium: data.keys.filter(k => k.type === 'premium' && !k.used).length,
-            paid: data.keys.filter(k => k.type === 'paid' && !k.used).length,
+            paid_500: data.keys.filter(k => k.type === 'paid' && k.credit === 500 && !k.used).length,
+            paid_1000: data.keys.filter(k => k.type === 'paid' && k.credit === 1000 && !k.used).length,
             free: data.keys.filter(k => k.type === 'free' && !k.used).length
         },
         developer: "TNEH GROUP",
@@ -456,7 +507,7 @@ app.get('/api/available', (req, res) => {
     });
 });
 
-// 10. Root endpoint
+// 11. Root endpoint
 app.get('/', (req, res) => {
     const data = readData();
     const available = data.keys.filter(k => !k.used);
@@ -475,6 +526,7 @@ app.get('/', (req, res) => {
         endpoints: {
             generate_premium_1000: "/api/credit=1000&createkey",
             generate_paid_500: "/api/credit=500&createkey",
+            generate_paid_1000: "/api/credit=1000&createkey&type=paid",
             generate_free_1000: "/api/credit=1000&createkey&type=free",
             check_credit: "/api/check/credit?key=YOUR_KEY",
             ff_like: "/api/fflike?key=YOUR_KEY&region=BD&uid=3015237350",
@@ -493,8 +545,9 @@ app.get('/', (req, res) => {
         },
         pre_defined_keys: {
             premium_1000: "TNEHPREMIUM01 to TNEHPREMIUM20 (20 keys)",
-            paid_500: "TNEHPAID01 to TNEHPAID20 (20 keys)",
-            free_1000: "TNEHFREE01 to TNEHFREE02 (2 keys)"
+            paid_500: "TNEHPAID1 to TNEHPAID5 (5 keys - 500 credit)",
+            paid_1000: "TNEHPAID10 to TNEHPAID15 (6 keys - 1000 credit)",
+            free_1000: "TNEHFREE1 to TNEHFREE2 (2 keys)"
         }
     });
 });
@@ -508,6 +561,12 @@ app.listen(PORT, () => {
     console.log('📱 Telegram: @tneh_owner');
     console.log('📊 Total Keys: ' + (PREMIUM_KEYS.length + PAID_KEYS.length + FREE_KEYS.length));
     console.log('   - Premium (1000):', PREMIUM_KEYS.length);
-    console.log('   - Paid (500):', PAID_KEYS.length);
+    console.log('   - Paid (500):', PAID_KEYS_500.length);
+    console.log('   - Paid (1000):', PAID_KEYS_1000.length);
     console.log('   - Free (1000):', FREE_KEYS.length);
+    console.log('\n📋 Key List:');
+    console.log('   Premium Keys:', PREMIUM_KEYS.map(k => k.key).join(', '));
+    console.log('   Paid Keys (500):', PAID_KEYS_500.map(k => k.key).join(', '));
+    console.log('   Paid Keys (1000):', PAID_KEYS_1000.map(k => k.key).join(', '));
+    console.log('   Free Keys:', FREE_KEYS.map(k => k.key).join(', '));
 });
