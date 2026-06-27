@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TNEH FF Liker v4.0 - Premium Free Fire Like Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(255, 69, 0, 0.1) 0%, transparent 40%),
+                #0a0a0f;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff6b35' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: bgScroll 60s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes bgScroll {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50%, -50%); }
+        }
+
+        /* Fire Particles */
+        .fire-particle {
+            position: fixed;
+            pointer-events: none;
+            width: 4px;
+            height: 4px;
+            background: #ff6b35;
+            border-radius: 50%;
+            animation: fireRise linear infinite;
+            z-index: 1;
+            box-shadow: 0 0 10px #ff6b35, 0 0 20px #ff4500;
+        }
+
+        @keyframes fireRise {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(0) rotate(720deg);
+            }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+            position: relative;
+        }
+
+        .header .fire-icon {
+            font-size: 70px;
+            display: inline-block;
+            animation: flameGlow 1.5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 30px rgba(255, 107, 53, 0.6));
+        }
+
+        @keyframes flameGlow {
+            0% {
+                transform: scale(1) rotate(-8deg);
+                filter: drop-shadow(0 0 20px rgba(255, 107, 53, 0.4));
+            }
+            100% {
+                transform: scale(1.15) rotate(8deg);
+                filter: drop-shadow(0 0 50px rgba(255, 69, 0, 0.8));
+            }
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', cursive;
+            font-size: 52px;
+            background: linear-gradient(45deg, #ff6b35, #ff4500, #ffd700, #ff6b35);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin: 10px 0 5px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px rgba(255, 107, 53, 0.3);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header .version {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 5px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            margin-top: 5px;
+        }
+
+        .header .subtitle {
+            color: #aaa;
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: 400;
+        }
+
+        .header .subtitle span {
+            color: #ff6b35;
+            font-weight: 700;
+        }
+
+        .developer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .developer-badge a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .developer-badge a:hover {
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0 40px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-item .number {
+            font-family: 'Orbitron', cursive;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-item .label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .stat-item.premium .number { color: #ff6b35; }
+        .stat-item.paid .number { color: #00d4ff; }
+        .stat-item.free .number { color: #00ff88; }
+        .stat-item.used .number { color: #ff4444; }
+        .stat-item.available .number { color: #44ff88; }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        /* Cards */
+        .card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 107, 53, 0.05), transparent, rgba(255, 215, 0, 0.05), transparent);
+            animation: rotateGlow 8s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.15);
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .card .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card h3 {
+            font-family: 'Orbitron', cursive;
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .card p {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .card .price {
+            font-family: 'Orbitron', cursive;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffd700;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .card .price small {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .card .badge {
+            display: inline-block;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .badge-premium {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+
+        .badge-paid {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .badge-free {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .card .key-list {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #ffd700;
+            max-height: 150px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .card .key-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .card .key-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .card .key-list::-webkit-scrollbar-thumb {
+            background: #ff6b35;
+            border-radius: 10px;
+        }
+
+        .card .key-list .key-item {
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card .key-list .key-item .status {
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+
+        .status-available {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .status-used {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        /* Endpoints Section */
+        .endpoints {
+            margin: 40px 0;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .endpoints h2 {
+            font-family: 'Orbitron', cursive;
+            font-size: 24px;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .endpoint-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 3px solid #ff6b35;
+            transition: all 0.3s;
+        }
+
+        .endpoint-item:hover {
+            background: rgba(255, 107, 53, 0.05);
+            transform: translateX(5px);
+        }
+
+        .endpoint-item .method {
+            font-size: 11px;
+            font-weight: 700;
+            color: #ff6b35;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .endpoint-item .url {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #ffd700;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+
+        .endpoint-item .desc {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Regions */
+        .regions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .region-tag {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            transition: all 0.3s;
+        }
+
+        .region-tag:hover {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: #ff6b35;
+            color: #ffd700;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 40px;
+        }
+
+        .footer .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer .social-links a {
+            color: #888;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .footer .social-links a:hover {
+            color: #ff6b35;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .footer .copyright {
+            color: #444;
+            font-size: 12px;
+        }
+
+        .footer .copyright span {
+            color: #ff6b35;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+                letter-spacing: 1px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header .fire-icon {
+                font-size: 50px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .endpoint-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .stat-item .number {
+                font-size: 20px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Glow pulse for cards */
+        .card.glow-premium {
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.1);
+        }
+
+        .card.glow-paid {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .card.glow-free {
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+
+    <!-- Fire Particles (JavaScript will generate) -->
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="fire-icon">🔥</div>
+            <h1>TNEH FF LIKER</h1>
+            <div class="version">⚡ v4.0 Premium ⚡</div>
+            <p class="subtitle">
+                <span>🚀</span> Ultimate Free Fire Like Service <span>🚀</span>
+            </p>
+            <div class="developer-badge">
+                👨‍💻 Developer: <a href="https://t.me/tneh_owner" target="_blank">@tneh_owner</a>
+                &nbsp;|&nbsp; 🌐 <a href="https://tnehff.base44.app" target="_blank">tnehff.base44.app</a>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item premium">
+                <div class="number" id="premiumCount">0</div>
+                <div class="label">🔥 Premium Keys (1000)</div>
+            </div>
+            <div class="stat-item paid">
+                <div class="number" id="paidCount">0</div>
+                <div class="label">💎 Paid Keys (500)</div>
+            </div>
+            <div class="stat-item free">
+                <div class="number" id="freeCount">0</div>
+                <div class="label">🎁 Free Keys (1000)</div>
+            </div>
+            <div class="stat-item available">
+                <div class="number" id="availableCount">0</div>
+                <div class="label">✅ Available</div>
+            </div>
+            <div class="stat-item used">
+                <div class="number" id="usedCount">0</div>
+                <div class="label">❌ Used</div>
+            </div>
+        </div>
+
+        <!-- Key Cards -->
+        <div class="grid">
+
+            <!-- Premium Keys -->
+            <div class="card glow-premium">
+                <span class="card-icon">🔥</span>
+                <h3>Premium Keys</h3>
+                <span class="badge badge-premium">1000 Credits</span>
+                <div class="price">৳500 <small>BDT</small></div>
+                <p>20 Premium keys with <span style="color:#ffd700;">1000</span> credits each</p>
+                <div class="key-list" id="premiumKeys">
+                    <div style="text-align:center;color:#666;padding:10px;">Loading keys...</div>
+                </div>
+            </div>
+
+            <!-- Paid Keys -->
+            <div class="card glow-paid">
+                <span class="card-icon">💎</span>
+                <h3>Paid Keys</h3>
+                <span class="badge badge-paid">500 Credits</span>
+                <div class="price">৳200 <small>BDT</small></div>
+                <p>20 Paid keys with <span style="color:#00d4ff;">500</span> credits each</p>
+                <div class="key-list" id="paidKeys">
+                    <div style="text-align:center;color:#666;padding:10px;">Loading keys...</div>
+                </div>
+            </div>
+
+            <!-- Free Keys -->
+            <div class="card glow-free">
+                <span class="card-icon">🎁</span>
+                <h3>Free Keys</h3>
+                <span class="badge badge-free">1000 Credits</span>
+                <div class="price">FREE</div>
+                <p>2 Free keys with <span style="color:#00ff88;">1000</span> credits each</p>
+                <div class="key-list" id="freeKeys">
+                    <div style="text-align:center;color:#666;padding:10px;">Loading keys...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Supported Regions -->
+        <div style="text-align:center;margin:20px 0;">
+            <p style="color:#888;font-size:14px;">🌍 Supported Regions</p>
+            <div class="regions">
+                <span class="region-tag">🇧🇩 BD - Bangladesh</span>
+                <span class="region-tag">🇧🇷 BR - Brazil</span>
+                <span class="region-tag">🇮🇳 IND - India</span>
+                <span class="region-tag">🇺🇸 NA - North America</span>
+                <span class="region-tag">🇦🇷 SAC - South America</span>
+                <span class="region-tag">🇺🇸 US - USA</span>
+            </div>
+        </div>
+
+        <!-- API Endpoints -->
+        <div class="endpoints">
+            <h2>📡 API Endpoints</h2>
+            <div class="endpoint-grid">
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/credit=1000&createkey</div>
+                    <div class="desc">Generate 20 Premium Keys (1000 Credit)</div>
+                </div>
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/credit=500&createkey</div>
+                    <div class="desc">Generate 20 Paid Keys (500 Credit)</div>
+                </div>
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/credit=1000&createkey&type=free</div>
+                    <div class="desc">Generate 2 Free Keys (1000 Credit)</div>
+                </div>
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/check/credit?key=KEY</div>
+                    <div class="desc">Check Key Status & Credit</div>
+                </div>
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/fflike?key=KEY&region=BD&uid=UID</div>
+                    <div class="desc">Send Free Fire Likes</div>
+                </div>
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/keys</div>
+                    <div class="desc">View All Keys (Admin)</div>
+                </div>
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/available</div>
+                    <div class="desc">Check Available Keys Count</div>
+                </div>
+                <div class="endpoint-item">
+                    <div class="method">GET</div>
+                    <div class="url">/api/reset</div>
+                    <div class="desc">Reset All Keys (Admin)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="social-links">
+                <a href="https://t.me/tneh_owner" target="_blank">📱 Telegram: @tneh_owner</a>
+                <a href="https://tnehff.base44.app" target="_blank">🌐 Website</a>
+                <a href="#" onclick="refreshData(); return false;">🔄 Refresh</a>
+            </div>
+            <div class="copyright">
+                © 2026 <span>TNEH GROUP</span> | Free Fire Liker v4.0 | All Rights Reserved
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Create fire particles
+        function createFireParticles() {
+            const container = document.body;
+            const count = 30;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'fire-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '-10px';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                particle.style.animationDelay = (Math.random() * 5) + 's';
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                container.appendChild(particle);
+            }
+        }
+
+        // Fetch and display key data
+        async function fetchKeyData() {
+            try {
+                const response = await fetch('/api/keys');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const keys = data.keys;
+                    
+                    // Filter keys by type
+                    const premium = keys.filter(k => k.type === 'premium');
+                    const paid = keys.filter(k => k.type === 'paid');
+                    const free = keys.filter(k => k.type === 'free');
+                    const available = keys.filter(k => !k.used);
+                    const used = keys.filter(k => k.used);
+                    
+                    // Update stats
+                    document.getElementById('premiumCount').textContent = premium.length;
+                    document.getElementById('paidCount').textContent = paid.length;
+                    document.getElementById('freeCount').textContent = free.length;
+                    document.getElementById('availableCount').textContent = available.length;
+                    document.getElementById('usedCount').textContent = used.length;
+                    
+                    // Display premium keys
+                    displayKeys('premiumKeys', premium);
+                    
+                    // Display paid keys
+                    displayKeys('paidKeys', paid);
+                    
+                    // Display free keys
+                    displayKeys('freeKeys', free);
+                }
+            } catch (error) {
+                console.error('Error fetching keys:', error);
+            }
+        }
+
+        function displayKeys(elementId, keys) {
+            const container = document.getElementById(elementId);
+            
+            if (keys.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:#666;padding:10px;">No keys available</div>';
+                return;
+            }
+            
+            let html = '';
+            keys.forEach(k => {
+                const status = k.used ? 
+                    '<span class="status status-used">USED</span>' : 
+                    '<span class="status status-available">AVAILABLE</span>';
+                html += `
+                    <div class="key-item">
+                        <span>${k.key}</span>
+                        ${status}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Refresh data
+        function refreshData() {
+            fetchKeyData();
+        }
+
+        // Initial load
+        createFireParticles();
+        fetchKeyData();
+
+        // Auto refresh every 30 seconds
+        setInterval(fetchKeyData, 30000);
+    </script>
+</body>
+</html>
